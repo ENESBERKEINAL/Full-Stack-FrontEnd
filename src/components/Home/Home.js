@@ -1,11 +1,27 @@
+import { ClassNames } from "@emotion/react";
 import React, { useEffect, useState } from "react";
 import Post from "../Post/Post"
+import CssBaseline from '@mui/material/CssBaseline';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles((theme) =>({
+    container:{
+        display: "flex",
+        flexWrap:"wrap",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#cfe8fc",
+        height: '100vh'
+    }
+}))
 
 function Home(){
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [postList,setPostList] = useState([]);  
-
+    const classes = useStyles();
     useEffect(()=>{
         fetch("/posts")
         .then(res => res.json())
@@ -27,15 +43,15 @@ function Home(){
         return <div> Loading...</div>
     }else{
         return(
-            <div className="container">
-            Home
+            <Container fixed className={classes.container}>
+
 
 
             {postList.map(post => (
                 <Post title= {post.title} text={post.text}></Post>
                 
             ))}
-            </div>
+            </Container>
 
         );
     }

@@ -32,7 +32,7 @@ function Navbar(){
           <Link className="link_home" to="/">Home</Link>
           </Typography>
           <Typography variant="h6" component="div">
-          <Link className="link_users" to={{pathname: 'users/' + userId}}>User</Link>
+          <Link className="link_users" to={{pathname: '/users/' + userId}}>User</Link>
           </Typography>
         </Toolbar>
       </AppBar>

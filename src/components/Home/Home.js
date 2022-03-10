@@ -1,19 +1,20 @@
 import { ClassNames } from "@emotion/react";
 import React, { useEffect, useState } from "react";
-import Post from "../Post/Post"
+import Post from "../Post/Post";
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { makeStyles } from "@mui/styles";
+import PostForm from "../Post/PostForm";
 
 const useStyles = makeStyles((theme) =>({
     container:{
         display: "flex",
         flexWrap:"wrap",
+        flexDirection: 'column',
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#cfe8fc",
-        height: '100vh'
+        backgroundColor: "#f0f5ff",
     }
 }))
 
@@ -22,7 +23,8 @@ function Home(){
     const [isLoaded, setIsLoaded] = useState(false);
     const [postList,setPostList] = useState([]);  
     const classes = useStyles();
-    useEffect(()=>{
+    
+    const refreshPosts = () => {
         fetch("/posts")
         .then(res => res.json())
         .then(
@@ -35,7 +37,11 @@ function Home(){
                 setError(error);
             }
         )
-    }, [])
+    }
+
+    useEffect(()=>{
+        refreshPosts()
+    }, [postList])
 
     if(error){
         return <div> Error !!!</div>
@@ -43,15 +49,13 @@ function Home(){
         return <div> Loading...</div>
     }else{
         return(
-            <Container fixed className={classes.container}>
-
-
-
+            <div className={classes.container}>
+            <PostForm userId={1} userName={"asdasdasdasd"} refreshPosts= {refreshPosts}/>
             {postList.map(post => (
                 <Post userId={post.userId} userName={post.userName} title= {post.title} text={post.text}></Post>
                 
             ))}
-            </Container>
+            </div>
 
         );
     }

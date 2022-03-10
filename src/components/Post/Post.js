@@ -13,6 +13,8 @@ import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
 import { BrowserRouter as Router, Link } from "react-router-dom";
+import { makeStyles } from '@material-ui/core/styles';
+import { bgcolor } from "@mui/system";
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -24,12 +26,38 @@ const ExpandMore = styled((props) => {
       duration: theme.transitions.duration.shortest,
     }),
   }));
-  
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      width: 800,
+      textAlign : "left",
+      margin : 20
+    },
+    media: {
+      height: 0,
+      paddingTop: '56.25%', // 16:9
+    },
+    expand: {
+      transform: 'rotate(0deg)',
+      marginLeft: 'auto',
+      transition: theme.transitions.create('transform', {
+        duration: theme.transitions.duration.shortest,
+      }),
+    },
+    avatar: {
+      background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+    },
+    link: {
+        textDecoration : "none",
+        boxShadow : "none",
+        color : 'white !important',
+        bgcolor:"red"
+    }
+  }));
   
 
 function Post(props){
     const {userId,userName,title,text} = props;
-    const classes = ExpandMore;
+    const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -41,13 +69,13 @@ function Post(props){
       
     return (
         <div className="postContainer">
-        <Card sx={{ width: 800 }}>
+        <Card sx={{ width: 800 }} className={classes.root}>
       <CardHeader style={{textAlign:"left"}} 
         avatar={
           
           // <a href={"/users/${userId}"}>
-          <Link className="link_users" to={{pathname: '/users/' + userId}}>
-            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+          <Link className={classes.link} to={{pathname: '/users/' + userId}}>
+            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" className={classes.avatar}>
               {userName.charAt(0).toUpperCase()}
             </Avatar>
             </Link>

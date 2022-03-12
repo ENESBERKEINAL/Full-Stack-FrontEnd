@@ -59,22 +59,33 @@ const ExpandMore = styled((props) => {
   
 
 function Post(props){
-    const {userId,userName,title,text,postId} = props;
+    const {userId,userName,title,text,postId,likes} = props;
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
     const [commentList,setCommentList] = useState([]);  
     const isInitialMount = useRef(true);
     const [isLoaded, setIsLoaded] = useState(false);
     const [error, setError] = useState(null);
+    const [isLiked, setIsLiked] = useState(false);
+    const [likeCount,setLikeCount] = useState(likes.length || 0);
+    const [likeId,setLikeId] = useState(null);
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
         refreshComments();
         console.log(commentList)
       };
-    const [liked,setLiked]= useState(false);
     const handleLike =() => {
-      setLiked(!liked);
+      setIsLiked(!isLiked);
+      if(!isLiked){
+        saveLike();
+        setLikeCount(likeCount+1);
+      }
+
+      else{
+        deleteLike();
+        setLikeCount(likeCount -1);
+      }
     }
 
     const refreshComments = () => {
@@ -92,12 +103,45 @@ function Post(props){
       )
   }
 
+  const checkLikes = () => {
+    var likeControl = likes.find((like=> like.userId === userId));
+    if(likeControl != null){
+      setLikeId(likeControl.id);
+      setIsLiked(true);
+    }
+
+  }
+
+  const saveLike = () =>{
+    fetch("/likes",{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        postId:postId,
+        userId:userId,
+      }),
+    })
+    .then((res)=> res.json())
+    .catch((err) => console.log(err))
+  }  
+  const deleteLike = () =>{
+    fetch("/likes/"+likeId,{
+      method: "DELETE",
+    })
+    .catch((err) => console.log(err))
+  }  
+
   useEffect(()=>{
     if(isInitialMount.current)
       isInitialMount.current= false;
     else
       refreshComments;
 }, [commentList])
+
+  useEffect(() => {checkLikes()},
+   []) 
       
     return (
         <div className="postContainer">
@@ -122,9 +166,11 @@ function Post(props){
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites" onClick={handleLike}>
-          <FavoriteIcon style={liked? {color:"red"}:null} />
+          <FavoriteIcon style={isLiked? {color:"red"}:null} />
         </IconButton>
 
+        {likeCount}
+        
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}

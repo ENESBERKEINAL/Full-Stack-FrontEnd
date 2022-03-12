@@ -51,10 +51,9 @@ function Home(){
         return(
             <div className={classes.container}>
             <PostForm userId={1} userName={"asdasdasdasd"} refreshPosts= {refreshPosts}/>
-            {postList.map(post => (
-                <Post postId={post.id} userId={post.userId} userName={post.userName} title= {post.title} text={post.text}></Post>
-                
-            ))}
+                {postList.map(post => (
+                    <Post postId={post.id} userId={post.userId} userName={post.userName} title= {post.title} text={post.text} likes= {post.postLikes} ></Post>
+                ))}
             </div>
 
         );

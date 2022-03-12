@@ -83,8 +83,7 @@ function PostForm(props){
             }),
         })
         .then((res) => res.json())
-        //TODO allways droping error fix that
-        .then((err) => console.log("error"))
+        .catch((err) => console.log("error"))
     }
 
     const handleSubmit = () => {
@@ -133,7 +132,7 @@ function PostForm(props){
             id="outlined-adornment-amount"
             multiline
             placeholder="Title"
-            inputProps={{maxlength: 25}}
+            inputProps={{maxLength: 25}}
             fullWidth
             value = {title} 
             onChange={ (i) => handleTitle( i.target.value)}
@@ -150,7 +149,7 @@ function PostForm(props){
             id="outlined-adornment-amount"
             multiline
             placeholder="Text"
-            inputProps={{maxlength: 250}}
+            inputProps={{maxLength: 250}}
             fullWidth
             value = {text} 
             onChange={ (i) => handleText( i.target.value)}
